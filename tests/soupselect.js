@@ -32,6 +32,12 @@ function assertSelects(test, dom, selector, expected_ids) {
         );
 }
 
+function assertSelectMultiple(test, dom, specs) {
+    specs.forEach(function(spec){
+        assertSelects(test, dom, spec[0], spec[1]);
+    });
+}
+
 exports.basicSelectors = {
     one_tag_one: function(test) {
         runTest(test, function(dom) {
@@ -62,6 +68,52 @@ exports.basicSelectors = {
         ['html div', 'html body div', 'body div'].forEach(function(selector) {
             runTest(test, function(dom) {
                 assertSelects(test, dom, selector, ['main', 'inner', 'footer']);
+            });
+        });
+    },
+    
+    tag_no_match: function(test) {
+        runTest(test, function(dom) {
+            test.equal(select(dom, 'del').length, 0);
+        });
+    },
+    
+    tag_invalid_tag: function(test) {
+        runTest(test, function(dom) {
+            test.equal(select(dom, 'tag%t').length, 0);
+        });
+    },
+    
+    header_tags: function(test) {
+        runTest(test, function(dom) {
+            assertSelectMultiple(test, dom, [
+                ['h1', ['header1']],
+                ['h2', ['header2', 'header3']]
+                ]);
+        });
+    },
+    
+    // class_one: function(test) {
+    //     runTest(test, function(dom) {
+    //         ['.onep', 'p.onep', 'html p.onep'].forEach(function(selector) {
+    //             var els = select(dom, selector);
+    //             test.equal(els.length, 1);
+    //             test.equal(els[0].name, 'p');
+    //             test.equal(els[0].attribs.class, 'onep');
+    //         });
+    //     });
+    // },
+    
+    class_mismatched_tag: function(test) {
+        runTest(test, function(dom) {
+            test.equal(select(dom, 'div.onep').length, 0);
+        })
+    },
+    
+    one_id: function(test) {
+        runTest(test, function(dom) {
+            ['div#inner', '#inner', 'div div#inner'].forEach(function(selector) {
+                assertSelects(test, dom, selector, ['inner']);
             });
         });
     }
