@@ -1,0 +1,25 @@
+{
+    "name": "soupselect",
+    "version": "v0.0.1",
+    "author": {
+        "name": "Harry Fuecks",
+        "email": "hfuecks@gmail.com",
+        "url": "http://twitter.com/hfuecks"
+        },
+    "url": "http://github.com/harryf/node-soupselect",
+    
+    "repository" : [
+    { "type":"git", "url":"git://github.com/harryf/node-soupselect.git" }
+    ],
+    
+    "dependencies": {
+        "htmlparser": ">= "
+        "nodeunit": ">= 1.6.2"
+    },
+    "main": "./index",
+    "directories": {
+        "lib": "lib"
+    },
+    "license": "MIT",
+    "description": "Adds CSS selector support to htmlparser for scraping activities - port of soupselect (python)"
+}
