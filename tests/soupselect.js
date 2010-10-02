@@ -245,9 +245,9 @@ exports.attributeSelectors = {
             assertSelectMultiple(test, dom, [
                 ['[href$=".css"]', ['l1']],
                 ['link[href$=".css"]', ['l1']],
-                // ['link[id$="1"]', ['l1']],
+                ['link[id$="1"]', ['l1']],
                 ['[id$="1"]', ['l1', 'p1', 'header1']],
-                // ['div[id$="1"]', []],
+                ['div[id$="1"]', []],
                 ['[id$="noending"]', []],
                 ]);
         });
@@ -278,8 +278,8 @@ exports.attributeSelectors = {
                 ['[id*="noending"]', []],
                 // New for this test
                 ['[href*="."]', ['bob', 'me', 'l1']],
-                // ['a[href*="."]', ['bob', 'me']],
-                // ['link[href*="."]', ['l1']],
+                ['a[href*="."]', ['bob', 'me']],
+                ['link[href*="."]', ['l1']],
                 // ['div[id*="n"]', ['main', 'inner']],
                 ['div[id*="nn"]', ['inner']],
                 ]);
@@ -303,8 +303,8 @@ exports.attributeSelectors = {
         runTest(test, function(dom) {
             assertSelectMultiple(test, dom, [
                 ['[rel]', ['l1', 'bob', 'me']],
-                // ['link[rel]', ['l1']],
-                // ['a[rel]', ['bob', 'me']],
+                ['link[rel]', ['l1']],
+                ['a[rel]', ['bob', 'me']],
                 ['[lang]', ['lang-en', 'lang-en-gb', 'lang-en-us', 'lang-fr']],
                 ['p[class]', ['p1', 'pmulti']],
                 ['[blah]', []],
