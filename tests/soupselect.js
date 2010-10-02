@@ -21,7 +21,11 @@ function assertSelects(test, dom, selector, expected_ids) {
     var el_ids = [];
     var els = select(dom, selector);
     els.forEach(function(el) {
-        el_ids.push(el.attribs.id);
+        if ( el.attribs && el.attribs.id ) {
+            el_ids.push(el.attribs.id);
+        } else {
+            el_ids.push('');
+        }
     });
     el_ids.sort();
     expected_ids.sort();
@@ -172,4 +176,141 @@ exports.basicSelectors = {
         test.done();
     },
     
+}
+
+exports.attributeSelectors = {
+    
+    attribute_equals: function(test) {
+        runTest(test, function(dom) {
+            assertSelectMultiple(test, dom, [
+                ['p[class="onep"]', ['p1']],
+                ['p[id="p1"]', ['p1']],
+                ['[class="onep"]', ['p1']],
+                ['[id="p1"]', ['p1']],
+                ['link[rel="stylesheet"]', ['l1']],
+                ['link[type="text/css"]', ['l1']],
+                ['link[href="blah.css"]', ['l1']],
+                ['link[href="no-blah.css"]', []],
+                ['[rel="stylesheet"]', ['l1']],
+                ['[type="text/css"]', ['l1']],
+                ['[href="blah.css"]', ['l1']],
+                ['[href="no-blah.css"]', []],
+                ['p[href="no-blah.css"]', []],
+                ['[href="no-blah.css"]', []],
+                ]);
+        });
+        test.done();
+    },
+    
+    attribute_tilde: function(test) {
+        runTest(test, function(dom) {
+            assertSelectMultiple(test, dom, [
+                ['p[class~="class1"]', ['pmulti']],
+                ['p[class~="class2"]', ['pmulti']],
+                ['p[class~="class3"]', ['pmulti']],
+                ['[class~="class1"]', ['pmulti']],
+                ['[class~="class2"]', ['pmulti']],
+                ['[class~="class3"]', ['pmulti']],
+                ['a[rel~="friend"]', ['bob']],
+                ['a[rel~="met"]', ['bob']],
+                ['[rel~="friend"]', ['bob']],
+                ['[rel~="met"]', ['bob']],
+                ]);
+        });
+        test.done();
+    },
+    
+    attribute_startswith: function(test) {
+        runTest(test, function(dom) {
+            assertSelectMultiple(test, dom, [
+                ['[rel^="style"]', ['l1']],
+                ['link[rel^="style"]', ['l1']],
+                ['notlink[rel^="notstyle"]', []],
+                ['[rel^="notstyle"]', []],
+                ['link[rel^="notstyle"]', []],
+                ['link[href^="bla"]', ['l1']],
+                ['a[href^="http://"]', ['bob', 'me']],
+                ['[href^="http://"]', ['bob', 'me']],
+                ['[id^="p"]', ['pmulti', 'p1']],
+                ['[id^="m"]', ['me', 'main']],
+                // ['div[id^="m"]', ['main']],
+                // ['a[id^="m"]', ['me']],
+                ]);
+        });
+        test.done();
+    },
+    
+    attribute_endswith: function(test) {
+        runTest(test, function(dom) {
+            assertSelectMultiple(test, dom, [
+                ['[href$=".css"]', ['l1']],
+                ['link[href$=".css"]', ['l1']],
+                // ['link[id$="1"]', ['l1']],
+                ['[id$="1"]', ['l1', 'p1', 'header1']],
+                // ['div[id$="1"]', []],
+                ['[id$="noending"]', []],
+                ]);
+        });
+        test.done();
+    },
+    
+    attribute_contains: function(test) {
+        runTest(test, function(dom) {
+            assertSelectMultiple(test, dom, [
+                // From test_attribute_startswith
+                ['[rel*="style"]', ['l1']],
+                ['link[rel*="style"]', ['l1']],
+                ['notlink[rel*="notstyle"]', []],
+                ['[rel*="notstyle"]', []],
+                ['link[rel*="notstyle"]', []],
+                ['link[href*="bla"]', ['l1']],
+                ['a[href*="http://"]', ['bob', 'me']],
+                ['[href*="http://"]', ['bob', 'me']],
+                ['[id*="p"]', ['pmulti', 'p1']],
+                // ['div[id*="m"]', ['main']],
+                // ['a[id*="m"]', ['me']],
+                // From test_attribute_endswith
+                ['[href*=".css"]', ['l1']],
+                ['link[href*=".css"]', ['l1']],
+                // ['link[id*="1"]', ['l1']],
+                ['[id*="1"]', ['l1', 'p1', 'header1']],
+                // ['div[id*="1"]', []],
+                ['[id*="noending"]', []],
+                // New for this test
+                ['[href*="."]', ['bob', 'me', 'l1']],
+                // ['a[href*="."]', ['bob', 'me']],
+                // ['link[href*="."]', ['l1']],
+                // ['div[id*="n"]', ['main', 'inner']],
+                ['div[id*="nn"]', ['inner']],
+                ]);
+        });
+        test.done();
+    },
+    
+    attribute_exact_or_hypen: function(test) {
+        runTest(test, function(dom) {
+            assertSelectMultiple(test, dom, [
+                ['p[lang|="en"]', ['lang-en', 'lang-en-gb', 'lang-en-us']],
+                ['[lang|="en"]', ['lang-en', 'lang-en-gb', 'lang-en-us']],
+                ['p[lang|="fr"]', ['lang-fr']],
+                ['p[lang|="gb"]', []],
+                ]);
+        });
+        test.done();
+    },
+    
+    attribute_exists: function(test) {
+        runTest(test, function(dom) {
+            assertSelectMultiple(test, dom, [
+                ['[rel]', ['l1', 'bob', 'me']],
+                // ['link[rel]', ['l1']],
+                // ['a[rel]', ['bob', 'me']],
+                ['[lang]', ['lang-en', 'lang-en-gb', 'lang-en-us', 'lang-fr']],
+                ['p[class]', ['p1', 'pmulti']],
+                ['[blah]', []],
+                ['p[blah]', []],
+                ]);
+        });
+        test.done();
+    },
 }
