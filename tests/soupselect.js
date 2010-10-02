@@ -15,12 +15,12 @@ function runTest(test, callback) {
     });
     var parser = new htmlparser.Parser(handler);
     parser.parseComplete(html);
-    test.done();
 }
 
 function assertSelects(test, dom, selector, expected_ids) {
     var el_ids = [];
-    select(dom, selector).forEach(function(el) {
+    var els = select(dom, selector);
+    els.forEach(function(el) {
         el_ids.push(el.attribs.id);
     });
     el_ids.sort();
@@ -46,6 +46,7 @@ exports.basicSelectors = {
             test.equal(els[0].name, 'title');
             test.equal(els[0].children[0].raw, 'The title');
         });
+        test.done();
     },
     
     one_tag_many: function(test) {
@@ -56,12 +57,14 @@ exports.basicSelectors = {
                 test.equal(div.name, 'div');
             });
         });
+        test.done();
     },
     
     tag_in_tag_one: function(test) {
         runTest(test, function(dom) {
             assertSelects(test, dom, 'div div', ['inner']);
         });
+        test.done();
     },
     
     tag_in_tag_many: function(test) {
@@ -70,18 +73,21 @@ exports.basicSelectors = {
                 assertSelects(test, dom, selector, ['main', 'inner', 'footer']);
             });
         });
+        test.done();
     },
     
     tag_no_match: function(test) {
         runTest(test, function(dom) {
             test.equal(select(dom, 'del').length, 0);
         });
+        test.done();
     },
     
     tag_invalid_tag: function(test) {
         runTest(test, function(dom) {
             test.equal(select(dom, 'tag%t').length, 0);
         });
+        test.done();
     },
     
     header_tags: function(test) {
@@ -91,23 +97,27 @@ exports.basicSelectors = {
                 ['h2', ['header2', 'header3']]
                 ]);
         });
+        test.done();
     },
     
-    // class_one: function(test) {
-    //     runTest(test, function(dom) {
-    //         ['.onep', 'p.onep', 'html p.onep'].forEach(function(selector) {
-    //             var els = select(dom, selector);
-    //             test.equal(els.length, 1);
-    //             test.equal(els[0].name, 'p');
-    //             test.equal(els[0].attribs.class, 'onep');
-    //         });
-    //     });
-    // },
+    class_one: function(test) {
+        runTest(test, function(dom) {
+            ['.onep', 'p.onep', 'html p.onep'].forEach(function(selector) {
+                var els = select(dom, selector);
+                test.equal(els.length, 1);
+                test.equal(els[0].name, 'p');
+                test.equal(els[0].attribs.class, 'onep');
+            });
+        });
+        test.done();
+    },
     
     class_mismatched_tag: function(test) {
         runTest(test, function(dom) {
-            test.equal(select(dom, 'div.onep').length, 0);
-        })
+            var els = select(dom, 'div.onep');
+            test.equal(els.length, 0);
+        });
+        test.done();
     },
     
     one_id: function(test) {
@@ -116,5 +126,50 @@ exports.basicSelectors = {
                 assertSelects(test, dom, selector, ['inner']);
             });
         });
-    }
+        test.done();
+    },
+    
+    bad_id: function(test) {
+        runTest(test, function(dom) {
+            var els = select(dom, '#doesnotexist');
+            test.equal(els.length, 0);
+        });
+        test.done();
+    },
+    
+    items_in_id: function(test) {
+        runTest(test, function(dom) {
+            var els = select(dom, 'div#inner p');
+            test.equal(els.length, 3);
+            els.forEach(function(el) {
+                test.equal(el.name, 'p');
+            });
+            test.equal(els[1].attribs.class, 'onep');
+            
+            // attribs not created when none around - checking there's not class attribute
+            test.ok(typeof els[0].attribs == 'undefined');
+            test.done();
+        });
+    },
+    
+    a_bunch_of_emptys: function(test) {
+        runTest(test, function(dom) {
+            ['div#main del', 'div#main div.oops', 'div div#main'].forEach(function(selector) {
+                test.equal(select(dom, selector).length, 0);
+            });
+        });
+        test.done();
+    },
+    
+    multi_class_support: function(test) {
+        runTest(test, function(dom) {
+            ['.class1', 'p.class1', '.class2', 'p.class2', 
+                '.class3', 'p.class3', 'html p.class2',
+                    'div#inner .class2'].forEach(function(selector) {
+                assertSelects(test, dom, selector, ['pmulti']);
+            });
+        });
+        test.done();
+    },
+    
 }
