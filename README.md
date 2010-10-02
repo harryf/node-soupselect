@@ -3,6 +3,14 @@ node-soupselect
 
 A port of Simon Willison's [soupselect](http://code.google.com/p/soupselect/) for use with node.js and node-htmlparser.
 
+    $ npm install soupselect
+
+Minimal example...
+
+    var select = require('soupselect').select;
+    // dom provided by htmlparser...
+    select(dom, "#main a.article").forEach(function(element) {//...});
+
 Wanted a friendly way to scrape HTML using node.js. Tried using jsdom, prompted by [this article](http://blog.nodejitsu.com/jsdom-jquery-in-5-lines-on-nodejs) but, unfortunately, [jsdom](http://github.com/tmpvar/jsdom) takes a strict view of lax HTML making it unusable for scraping the kind of soup found in real world web pages. Luckily [htmlparser](http://github.com/tautologistics/node-htmlparser/) is more forgiving.
 
 A complete example including fetching HTML etc...;
