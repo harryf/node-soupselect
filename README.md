@@ -51,6 +51,7 @@ A complete example including fetching HTML etc...;
     request.end();
 
 Notes:
-    - Requires node-htmlparser > 1.6.2 & node.js 2+
-    - Calls to select are synchronous - not worth trying to make it asynchronous IMO given the use case
+
+* Requires node-htmlparser > 1.6.2 & node.js 2+
+* Calls to select are synchronous - not worth trying to make it asynchronous IMO given the use case
 
