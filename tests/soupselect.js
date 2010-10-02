@@ -150,7 +150,7 @@ exports.basicSelectors = {
             });
             test.equal(els[1].attribs.class, 'onep');
             
-            // attribs not created when none around - checking there's not class attribute
+            // attribs not created when none around - should really be checking there's no class attribute
             test.ok(typeof els[0].attribs == 'undefined');
             test.done();
         });
@@ -233,8 +233,8 @@ exports.attributeSelectors = {
                 ['[href^="http://"]', ['bob', 'me']],
                 ['[id^="p"]', ['pmulti', 'p1']],
                 ['[id^="m"]', ['me', 'main']],
-                // ['div[id^="m"]', ['main']],
-                // ['a[id^="m"]', ['me']],
+                ['div[id^="m"]', ['main']],
+                ['a[id^="m"]', ['me']],
                 ]);
         });
         test.done();
@@ -267,20 +267,20 @@ exports.attributeSelectors = {
                 ['a[href*="http://"]', ['bob', 'me']],
                 ['[href*="http://"]', ['bob', 'me']],
                 ['[id*="p"]', ['pmulti', 'p1']],
-                // ['div[id*="m"]', ['main']],
-                // ['a[id*="m"]', ['me']],
+                ['div[id*="m"]', ['main']],
+                ['a[id*="m"]', ['me']],
                 // From test_attribute_endswith
                 ['[href*=".css"]', ['l1']],
                 ['link[href*=".css"]', ['l1']],
-                // ['link[id*="1"]', ['l1']],
+                ['link[id*="1"]', ['l1']],
                 ['[id*="1"]', ['l1', 'p1', 'header1']],
-                // ['div[id*="1"]', []],
+                ['div[id*="1"]', []],
                 ['[id*="noending"]', []],
                 // New for this test
                 ['[href*="."]', ['bob', 'me', 'l1']],
                 ['a[href*="."]', ['bob', 'me']],
                 ['link[href*="."]', ['l1']],
-                // ['div[id*="n"]', ['main', 'inner']],
+                ['div[id*="n"]', ['main', 'inner']],
                 ['div[id*="nn"]', ['inner']],
                 ]);
         });
