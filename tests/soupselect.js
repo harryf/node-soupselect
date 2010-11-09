@@ -71,6 +71,13 @@ exports.basicSelectors = {
         test.done();
     },
     
+    tags_in_tags: function(test) {
+        runTest(test, function(dom) {
+            assertSelects(test, dom, 'span span', ['yx', 'yy']);
+        });
+        test.done();
+    },
+    
     tag_in_tag_many: function(test) {
         ['html div', 'html body div', 'body div'].forEach(function(selector) {
             runTest(test, function(dom) {
@@ -120,6 +127,14 @@ exports.basicSelectors = {
         runTest(test, function(dom) {
             var els = select(dom, 'div.onep');
             test.equal(els.length, 0);
+        });
+        test.done();
+    },
+    
+    multi_class: function(test) {
+        runTest(test, function(dom) {
+            var els = select(dom, 'p.class1.class2.class3');
+            test.equal(els.length, 1);
         });
         test.done();
     },
