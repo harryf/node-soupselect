@@ -11,7 +11,7 @@ Minimal example...
     // dom provided by htmlparser...
     select(dom, "#main a.article").forEach(function(element) {//...});
 
-Wanted a friendly way to scrape HTML using node.js. Tried using [jsdom](http://github.com/tmpvar/jsdom), prompted by [this article](http://blog.nodejitsu.com/jsdom-jquery-in-5-lines-on-nodejs) but, unfortunately, [jsdom](http://github.com/tmpvar/jsdom) takes a strict view of lax HTML making it unusable for scraping the kind of soup found in real world web pages. Luckily [htmlparser](http://github.com/tautologistics/node-htmlparser/) is more forgiving. More details this found [here](http://www.reddit.com/r/node/comments/dm0tz/nodesoupselect_for_scraping_html_with_css/c118r23).
+Wanted a friendly way to scrape HTML using node.js. Tried using [jsdom](http://github.com/tmpvar/jsdom), prompted by [this article](http://blog.nodejitsu.com/jsdom-jquery-in-5-lines-on-nodejs) but, unfortunately, [jsdom](http://github.com/tmpvar/jsdom) takes a strict view of lax HTML making it unusable for scraping the kind of soup found in real world web pages. Luckily [htmlparser](http://github.com/tautologistics/node-htmlparser/) is more forgiving. More details on this found [here](http://www.reddit.com/r/node/comments/dm0tz/nodesoupselect_for_scraping_html_with_css/c118r23).
 
 A complete example including fetching HTML etc...;
 
