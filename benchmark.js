@@ -5,8 +5,7 @@ but only runs those tests where the CSS syntax used is supported by soupselect
 
 var select = require('soupselect').select,
     htmlparser = require("htmlparser"),
-    fs = require('fs'),
-    sys = require('sys');
+    fs = require('fs');
 
 var html = fs.readFileSync('testdata/benchmark.html', 'utf-8');
 
@@ -34,10 +33,10 @@ var selectors = [
     ];
 
 selectors.forEach(function(selector) {
-    
+
     var handler = new htmlparser.DefaultHandler(function(err, dom) {
         if (err) {
-            sys.debug("Error: " + err);
+            console.error("Error: " + err);
         } else {
             var start = new Date().getTime();
             var els = select(dom, selector);
@@ -48,5 +47,5 @@ selectors.forEach(function(selector) {
 
     var parser = new htmlparser.Parser(handler);
     parser.parseComplete(html);
-    
+
 });

@@ -1,14 +1,13 @@
 var select = require('soupselect').select,
     htmlparser = require("htmlparser"),
-    fs = require('fs'),
-    sys = require('sys');
+    fs = require('fs');
 
 var html = fs.readFileSync('testdata/test.html', 'utf-8');
 
 function runTest(test, callback) {
     var handler = new htmlparser.DefaultHandler(function(err, dom) {
         if (err) {
-            sys.debug("Error: " + err);
+            console.error("Error: " + err);
         } else {
             callback(dom);
         }
@@ -52,7 +51,7 @@ exports.basicSelectors = {
         });
         test.done();
     },
-    
+
     one_tag_many: function(test) {
         runTest(test, function(dom) {
             var els = select(dom, 'div');
@@ -63,21 +62,21 @@ exports.basicSelectors = {
         });
         test.done();
     },
-    
+
     tag_in_tag_one: function(test) {
         runTest(test, function(dom) {
             assertSelects(test, dom, 'div div', ['inner']);
         });
         test.done();
     },
-    
+
     tags_in_tags: function(test) {
         runTest(test, function(dom) {
             assertSelects(test, dom, 'span span', ['yx', 'yy']);
         });
         test.done();
     },
-    
+
     tag_in_tag_many: function(test) {
         ['html div', 'html body div', 'body div'].forEach(function(selector) {
             runTest(test, function(dom) {
@@ -86,21 +85,21 @@ exports.basicSelectors = {
         });
         test.done();
     },
-    
+
     tag_no_match: function(test) {
         runTest(test, function(dom) {
             test.equal(select(dom, 'del').length, 0);
         });
         test.done();
     },
-    
+
     tag_invalid_tag: function(test) {
         runTest(test, function(dom) {
             test.equal(select(dom, 'tag%t').length, 0);
         });
         test.done();
     },
-    
+
     header_tags: function(test) {
         runTest(test, function(dom) {
             assertSelectMultiple(test, dom, [
@@ -110,7 +109,7 @@ exports.basicSelectors = {
         });
         test.done();
     },
-    
+
     class_one: function(test) {
         runTest(test, function(dom) {
             ['.onep', 'p.onep', 'html p.onep'].forEach(function(selector) {
@@ -122,7 +121,7 @@ exports.basicSelectors = {
         });
         test.done();
     },
-    
+
     class_mismatched_tag: function(test) {
         runTest(test, function(dom) {
             var els = select(dom, 'div.onep');
@@ -130,7 +129,7 @@ exports.basicSelectors = {
         });
         test.done();
     },
-    
+
     multi_class: function(test) {
         runTest(test, function(dom) {
             var els = select(dom, 'p.class1.class2.class3');
@@ -138,7 +137,7 @@ exports.basicSelectors = {
         });
         test.done();
     },
-    
+
     one_id: function(test) {
         runTest(test, function(dom) {
             ['div#inner', '#inner', 'div div#inner'].forEach(function(selector) {
@@ -147,7 +146,7 @@ exports.basicSelectors = {
         });
         test.done();
     },
-    
+
     bad_id: function(test) {
         runTest(test, function(dom) {
             var els = select(dom, '#doesnotexist');
@@ -155,7 +154,7 @@ exports.basicSelectors = {
         });
         test.done();
     },
-    
+
     items_in_id: function(test) {
         runTest(test, function(dom) {
             var els = select(dom, 'div#inner p');
@@ -164,13 +163,13 @@ exports.basicSelectors = {
                 test.equal(el.name, 'p');
             });
             test.equal(els[1].attribs.class, 'onep');
-            
+
             // attribs not created when none around - should really be checking there's no class attribute
             test.ok(typeof els[0].attribs == 'undefined');
             test.done();
         });
     },
-    
+
     a_bunch_of_emptys: function(test) {
         runTest(test, function(dom) {
             ['div#main del', 'div#main div.oops', 'div div#main'].forEach(function(selector) {
@@ -179,10 +178,10 @@ exports.basicSelectors = {
         });
         test.done();
     },
-    
+
     multi_class_support: function(test) {
         runTest(test, function(dom) {
-            ['.class1', 'p.class1', '.class2', 'p.class2', 
+            ['.class1', 'p.class1', '.class2', 'p.class2',
                 '.class3', 'p.class3', 'html p.class2',
                     'div#inner .class2'].forEach(function(selector) {
                 assertSelects(test, dom, selector, ['pmulti']);
@@ -190,11 +189,11 @@ exports.basicSelectors = {
         });
         test.done();
     },
-    
+
 }
 
 exports.attributeSelectors = {
-    
+
     attribute_equals: function(test) {
         runTest(test, function(dom) {
             assertSelectMultiple(test, dom, [
@@ -216,7 +215,7 @@ exports.attributeSelectors = {
         });
         test.done();
     },
-    
+
     attribute_tilde: function(test) {
         runTest(test, function(dom) {
             assertSelectMultiple(test, dom, [
@@ -234,7 +233,7 @@ exports.attributeSelectors = {
         });
         test.done();
     },
-    
+
     attribute_startswith: function(test) {
         runTest(test, function(dom) {
             assertSelectMultiple(test, dom, [
@@ -254,7 +253,7 @@ exports.attributeSelectors = {
         });
         test.done();
     },
-    
+
     attribute_endswith: function(test) {
         runTest(test, function(dom) {
             assertSelectMultiple(test, dom, [
@@ -268,7 +267,7 @@ exports.attributeSelectors = {
         });
         test.done();
     },
-    
+
     attribute_contains: function(test) {
         runTest(test, function(dom) {
             assertSelectMultiple(test, dom, [
@@ -301,7 +300,7 @@ exports.attributeSelectors = {
         });
         test.done();
     },
-    
+
     attribute_exact_or_hypen: function(test) {
         runTest(test, function(dom) {
             assertSelectMultiple(test, dom, [
@@ -313,7 +312,7 @@ exports.attributeSelectors = {
         });
         test.done();
     },
-    
+
     attribute_exists: function(test) {
         runTest(test, function(dom) {
             assertSelectMultiple(test, dom, [
